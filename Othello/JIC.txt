@@ -1,0 +1,145 @@
+public static void checkmyLeft(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == myColor && currentBoard.whoseTurn == myColor && incValue < tempcols) {
+                    if (currentBoard.board[i][j - incValue] == opponentColor) {
+                        currentBoard.board[i][j - incValue] = myColor;
+                        currentBoard.board[i][(j - incValue) - 1] = myColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = opponentColor;
+    }//End of checkmyLeft
+
+    public static void checkopponentLeft(Board currentBoard) {
+
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == opponentColor && currentBoard.whoseTurn == opponentColor && incValue < tempcols) {
+                    if (currentBoard.board[i][j - incValue] == myColor) {
+                        currentBoard.board[i][j - incValue] = opponentColor;
+                        currentBoard.board[i][(j - incValue) - 1] = opponentColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = myColor;
+    }//End of checkopponentLeft
+
+    public static void checkmyRight(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == myColor && currentBoard.whoseTurn == myColor && incValue < tempcols) {
+                    if (currentBoard.board[i][j + incValue] == opponentColor) {
+                        currentBoard.board[i][j + incValue] = myColor;
+                        currentBoard.board[i][(j + incValue) + 1] = myColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = opponentColor;
+    }//End of checkmyRight
+
+    public static void checkopponentRight(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == opponentColor && currentBoard.whoseTurn == opponentColor && incValue < tempcols) {
+                    if (currentBoard.board[i][j + incValue] == myColor) {
+                        currentBoard.board[i][j + incValue] = opponentColor;
+                        currentBoard.board[i][(j + incValue) + 1] = opponentColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = myColor;
+    }//End of checkopponentRight
+
+    public static void checkmyTop(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == myColor && currentBoard.whoseTurn == myColor && incValue < tempcols) {
+                    if (currentBoard.board[i - incValue][j] == opponentColor) {
+                        currentBoard.board[i - incValue][j] = myColor;
+                        currentBoard.board[(i - incValue) - 1][j] = myColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = opponentColor;
+    }//End of checkmyTop
+
+    public static void checkopponentTop(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+
+                if (currentBoard.board[i][j] == opponentColor && currentBoard.whoseTurn == opponentColor && incValue < tempcols) {
+                    if (currentBoard.board[i - incValue][j] == myColor) {
+                        currentBoard.board[i - incValue][j] = opponentColor;
+                        currentBoard.board[(i - incValue) - 1][j] = opponentColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = myColor;
+    }//End of checkopponentTop
+
+    public static void checkmyBottom(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == myColor && currentBoard.whoseTurn == myColor && incValue < tempcols) {
+                    if (currentBoard.board[i + incValue][j] == opponentColor) {
+                        currentBoard.board[i + incValue][j] = myColor;
+                        currentBoard.board[(i + incValue) + 1][j] = myColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = opponentColor;
+    }//End of checkmyBottom
+
+    public static void checkopponentBottom(Board currentBoard) {
+        System.out.println(rowsGlobal);
+        System.out.println(columnsGlobal);
+        int tempcols = currentBoard.boardCols;
+        int temprows = currentBoard.boardRows;
+        for (int i = 0; i < temprows; i++) {
+            for (int j = 0; j < tempcols; j++) {
+                if (currentBoard.board[i][j] == opponentColor && currentBoard.whoseTurn == opponentColor && incValue < tempcols) {
+                    if (currentBoard.board[i + incValue][j] == myColor) {
+                        currentBoard.board[i + incValue][j] = opponentColor;
+                        currentBoard.board[(i + incValue) + 1][j] = opponentColor;
+                    }
+                }
+            }
+        }
+        currentBoard.whoseTurn = myColor;
+    }//End of checkopponentBottom
