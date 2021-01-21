@@ -1,0 +1,2 @@
+This program was coded in Java using Netbeans 8.2.  This program is supposed to create in infinitely expanding 2d space which objects are autonomously and arbitrarily created (by default but can be manually changed).  These objects in space then have attributes of velocity, accleration, and mass which react to one other given the different numberic values of mass, velocity, and acceleration.  
+Once two objects it one another, these objects will "collide" which they will then form a new entity, based off the size and mass of the objects that were involved in the collision.
