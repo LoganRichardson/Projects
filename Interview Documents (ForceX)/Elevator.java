@@ -1,0 +1,251 @@
+//Program:  Elevator.java
+//Description:  This program will get a size and simulated measure of an elevator, and test it against
+//              various test points and values to ensure the quality of the product
+//Author:   Logan Richardson
+//Revised:  9/16/2021
+//Language: Java
+//IDE:      Netbeans
+//Notes:    ---
+package hackerrank;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+//**************************************************************************************************************************
+//**************************************************************************************************************************
+//Class: Elevator
+//Description: The primary class which holds the main method which gets the elevator number value and two other methods,
+//              one being optionMethod which houses all the status updates and prompts, and checkAll which checks the
+//              status of all available elevators.
+public class Elevator {
+    //************************************************************************
+    //Method:         main
+    //Description:    Class which gets the amount of elevators and populates them with a placeholder value
+    //Parameters:     nothing
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          -optionMethod
+    public static void main(String[] args) {
+        ArrayList<Controller> list = new ArrayList<Controller>();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("How many elevators should there be?");
+        int eleObjects = scanner.nextInt();
+
+        for (int i = 0; i < eleObjects; i++) {
+            list.add(new Controller(eleObjects));
+        }
+
+        optionMethod(list, scanner);
+    }
+    //End of main Method
+    //************************************************************************
+    
+    //************************************************************************
+    //Method:         optionMethod
+    //Description:    Method which houses all the status messages for each floor as well as the prompts for checking which
+    //                option the user wants to select.
+    //Parameters:     ArrayList<Controller> list
+    //                Scanner scan
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          -checkAll
+    //                -selectAll
+    //                -reset
+    //                -backToBasement
+    //                -selectFloor
+    public static void optionMethod(ArrayList<Controller> list, Scanner scan) {
+        while (true) {
+            System.out.println("What would you like to do?");
+            System.out.println("-");
+            System.out.println("Change floors(1)");
+            System.out.println("Check floor(2)");
+            System.out.println("Return elevator to base(3)");
+            System.out.println("Reset Elevator Values(4)");
+            System.out.println("Status of all elevators(5)");
+            System.out.println("Quit program(6)");
+            String option = scan.next();
+            if (option.equals("1")) {
+                System.out.println("Which elevator would you like to move? (ex: 2, 5, 7)");
+                int floorNum = scan.nextInt() - 1;
+                if (floorNum >= list.size()) {
+                    System.out.println("There are only " + list.size() + " elevators.");
+                } else if (floorNum < 0) {
+                    System.out.println("Cannot pick an elevator that is 0 or less.");
+                } else if (floorNum == 13) {
+                    System.out.println("Cannot choose elevator 13.");
+                } else {
+                    System.out.println("Enter the floor you'd like to go to: ");
+                    list.get(floorNum).selectFloor();
+                    String change = "y";
+                    while (change.equals("y")) {
+                        System.out.println("Would you like to move floors again? (y/n)");
+                        change = scan.next();
+                        if (change.equals("y")) {
+                            System.out.println("Enter the floor you'd like to go to: ");
+                            list.get(floorNum).selectFloor();
+                        }
+                        break;
+                    }
+                }
+                System.out.println("");
+            } else if (option.equals("2")) {
+                System.out.println("Which floor would you like to check? (ex: 2, 5, 7)");
+                int floorNum = scan.nextInt();
+                if (list.get(floorNum).getFloor() == 0) {
+                    System.out.println("Elevator on the base floor.");
+                } else if (list.get(floorNum).getFloor() == 13) {
+                    System.out.println("Elevator on invalid 13th floor.");
+                } else if (list.get(floorNum).getFloor() == list.size()) {
+                    System.out.println("Elevator on the top most floor.");
+                }
+            } else if (option.equals("3")) {
+                System.out.println("Which floor would you like to return to base? (ex: 2, 5, 7)");
+                int floorNum = scan.nextInt();
+                list.get(floorNum).backToBasement();
+                System.out.println("Elevator is back on the base floor.");
+            } else if (option.equals("4")) {
+                System.out.println("Which floor would you like to reset? (ex: 2, 5, 7)");
+                int floorNum = scan.nextInt();
+                list.get(floorNum).reset();
+                System.out.println("Elevators have been reset.");
+            } else if (option.equals("5")) {
+                checkAll(list);
+            } else if(option.equals("6")){
+                System.exit(0);                
+            } else{
+                System.out.println("Choose a valid option.");
+            }
+        }
+    }
+    //End of optionMethod Method
+    //************************************************************************
+    
+    //************************************************************************
+    //Method:         checkAll
+    //Description:    Method that checks the status of all available floors and elevators and outputs the result
+    //Parameters:     ArrayList<Controller> list
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          nothing
+    public static void checkAll(ArrayList<Controller> list) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println("Elevator " + (i + 1) + " is on floor " + (list.get(i).getFloor() + 1) + ".");
+        }
+        System.out.println("");
+    }
+}
+//End of Elevator class
+//**************************************************************************************************************************
+//**************************************************************************************************************************
+
+
+    //End of checkAll Method
+    //************************************************************************
+
+//**************************************************************************************************************************
+//**************************************************************************************************************************
+//Class: Controller
+//Description: The Controller class is resposible for all the computing and arithmetic in the program.  It lacks most of the log and status messages that
+//             the Elevator class has and contains various methods to check and recompute tasks.
+class Controller {
+
+    private int size;
+    private int currentFloor;
+    private int direction = 0;
+
+    //************************************************************************
+    //Method:         Controller
+    //Description:    The default constructor for the Controller class
+    //Parameters:     size
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          nothing
+    public Controller(int size) {
+        this.size = size - 1;
+    }
+    //End of Controller Method
+    //************************************************************************
+
+    //************************************************************************
+    //Method:         selectFloor
+    //Description:    The primary method in the Controller class, responsible for checking floor levels, and various conditionals to keep 
+    //                the user within the constraints.  Also checks duration between elevator trips by the metric of 14 seconds per floor
+    //                as the average time of transport per floor.
+    //Parameters:     nothing
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          nothing
+    public void selectFloor() {
+        int newFloor;
+        Scanner scan = new Scanner(System.in);
+        newFloor = scan.nextInt() - 1;
+        if (newFloor > size || newFloor < 0 || newFloor == 13) {
+            System.out.println("Invalid");
+        } else {
+            if (currentFloor < newFloor) {
+                currentFloor = newFloor;
+                direction = (currentFloor - direction);
+            } else if (currentFloor > newFloor) {
+                currentFloor = newFloor;
+                direction = (direction - currentFloor);
+            } else {
+                direction = 0;
+            }
+            System.out.println("");
+            System.out.println("Current Floor: " + (currentFloor + 1));
+            if (direction > 0) {
+                System.out.println("Duration of ride: " + (direction * 14) + " seconds.");
+            } else {
+                System.out.println("Same floor: " + direction * 0);
+            }
+            System.out.println("");
+        }
+    }
+    //End of selectFloor Method
+    //************************************************************************
+
+    //************************************************************************
+    //Method:         getFloor
+    //Description:    Returns the value for the current floor on said object.  Used in Elevator class for checking status.
+    //Parameters:     nothing
+    //Returns:        currentFloor
+    //Throws          nothing
+    //Calls:          nothing
+    public int getFloor() {
+        return currentFloor;
+    }
+    //End of getFloor Method
+    //************************************************************************
+
+    //************************************************************************
+    //Method:         backToBasement
+    //Description:    Resets the current floor of the current elevator to 0, resetting the status of the elevator to be a base level.
+    //Parameters:     nothing
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          nothing
+    public void backToBasement() {
+        currentFloor = 0;
+    }
+    //End of backToBasement Method
+    //************************************************************************
+
+    //************************************************************************
+    //Method:         reset
+    //Description:    Resets both global values of currentFloor and direction to be 0.  This resets current position and the tracked position
+    //                on the current object for user convenience.
+    //Parameters:     nothing
+    //Returns:        nothing
+    //Throws          nothing
+    //Calls:          nothing
+    public void reset() {
+        this.currentFloor = 0;
+        this.direction = 0;
+    }
+    //End of reset Method
+    //************************************************************************
+}
+//End of Controller class
+//**************************************************************************************************************************
+//**************************************************************************************************************************
+
+
